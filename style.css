@@ -52,7 +52,7 @@ body {
     flex: 1;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Spacing between cards */
+    gap: 20px; 
     padding: 20px;
     justify-content: flex-start;
     overflow-y: auto;
@@ -65,7 +65,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 15px;
     width: 250px;
-    margin: 10px; /* Add margin between cards */
+    margin: 10px;
     text-align: center;
 }
 
@@ -281,11 +281,12 @@ body {
     position: relative;
 }
 
-.dropdown-toggle {
-    background: none;
-    border: none;
+.dropdown-toggle::before {
+    content: "⋮";
+    color: #a79d99;
+    display: inline-block;
     cursor: pointer;
-    font-size: 1000px;
+    font-size: 30px;
     line-height: 1;
 }
 
