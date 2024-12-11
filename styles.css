@@ -90,6 +90,7 @@ body {
     width: 250px;
     margin: 10px; /* Add margin between cards */
     text-align: center;
+    position: relative;
 }
 
 /* List card heading */
@@ -425,4 +426,19 @@ body {
 
 .color-button.selected {
     border: 2px solid black;
+}
+
+.delete-list-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none !important;
+    border: none !important;
+    cursor: pointer;
+    font-size: 18px;
+    color: red !important;
+}
+
+.delete-list-button:hover {
+    color: darkred !important;
 }
