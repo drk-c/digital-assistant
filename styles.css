@@ -1,0 +1,349 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: #f9f9f9;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.create-button {
+    width: 100%;
+    background-color: #ede9de;
+    color: #8c846d;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.create-button:hover {
+    background-color: #ddd9ce;
+}
+
+/* Sidebar list items */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+}
+
+/* Container for list cards */
+.lists-container {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Spacing between cards */
+    padding: 20px;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
+
+/* Individual list cards */
+.list-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 250px;
+    margin: 10px; /* Add margin between cards */
+    text-align: center;
+}
+
+/* List card heading */
+.list-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* Add task button styling inside list cards */
+.list-card button {
+    display: block;
+    margin: 0 auto;
+    background-color: #ede9de;
+    color: #8c846d;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.list-card button:hover {
+    background-color: #ddd9ce;
+}
+
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-task-button {
+    background-color: #ede9de;
+    color: #8c846d;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.add-task-button:hover {
+    background-color: #ddd9ce;
+}
+
+.task-list {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.tasks-container {
+    display: flex;
+    align-items: flex-start;
+    height: 100vh;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.task-item div {
+    text-align: left;
+}
+
+.task-item strong {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.task-item small {
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    align-items: center; /* Align icon and text */
+    margin-bottom: 5px;
+}
+
+.task-item small svg {
+    margin-right: 5px; /* Add space between icon and date */
+}
+
+.task-item p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.task-options {
+    margin-left: auto; /* Push options to the far right */
+}
+
+.task-item .task-title {
+    font-size: 14px;
+    color: #8c846d;
+}
+
+.task-item .task-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ede9de;
+    font-size: 14px;
+}
+
+/* Modal styling */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.input-group {
+    margin: 10px 0;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+}
+
+#task-title,
+#task-date,
+#task-time,
+#task-description {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#save-task {
+    background-color: #ede9de;
+    color: #8c846d;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#save-task:hover {
+    background-color: #ddd9ce;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+/* Dropdown menu for task options */
+.task-options {
+    position: relative;
+}
+
+.dropdown-toggle::before {
+    content: "⋮";
+    color: #a79d99;
+    display: inline-block;;
+    cursor: pointer;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: 30px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown.hidden {
+    display: none;
+}
+
+.dropdown button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdown button:hover {
+    background: #f0f0f0;
+}
+
+/* Labels */
+.task-label {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+}
+i
+/* Color selection */
+.color-options {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.color-button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.color-button.selected {
+    border: 2px solid black;
+}
