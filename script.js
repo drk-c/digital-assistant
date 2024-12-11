@@ -148,18 +148,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const listCard = document.createElement("div");
         listCard.className = "list-card";
         listCard.dataset.listName = listName;
-
+    
+        // Add a delete button only for user-created lists
         listCard.innerHTML = `
+            <button class="delete-list-button">🗑️</button>
             <h3>${listName}</h3>
             <ul class="task-list"></ul>
             <button class="add-task-button" data-list="${listName}">+ Add a task</button>
         `;
-
+    
         listsContainer.appendChild(listCard);
-
+    
+        // Add event listener for the "Add a task" button
         listCard.querySelector(".add-task-button").addEventListener("click", () => {
             openModal(listName);
         });
+    
+        // Add event listener for the delete button
+        const deleteButton = listCard.querySelector(".delete-list-button");
+        deleteButton.addEventListener("click", () => {
+            listCard.remove(); // Remove the list card from the DOM
+            saveListsToLocalStorage(); // Update Local Storage
+        });
+    
+        saveListsToLocalStorage(); // Save the new list to Local Storage
     };
 
     // Function to open a modal for creating a new list
@@ -227,8 +239,50 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const predefinedLists = ["Today", "Homework", "To Do", "Career"];
-    predefinedLists.forEach((list) => createNewList(list));
+    // Function to save lists to Local Storage
+const saveListsToLocalStorage = () => {
+    const lists = [];
+    document.querySelectorAll(".list-card").forEach((listCard) => {
+        const listName = listCard.dataset.listName;
 
-    loadTasksFromLocalStorage();
+        // Skip predefined lists
+        if (!["Today", "Homework", "To Do", "Career"].includes(listName)) {
+            lists.push(listName);
+        }
+    });
+
+    localStorage.setItem("customLists", JSON.stringify(lists));
+};
+
+// Function to load lists from Local Storage
+const loadListsFromLocalStorage = () => {
+    const customLists = JSON.parse(localStorage.getItem("customLists")) || [];
+    customLists.forEach((listName) => {
+        createNewList(listName);
+    });
+};
+
+// Predefined lists (kept static and undeletable)
+const predefinedLists = ["Today", "Homework", "To Do", "Career"];
+predefinedLists.forEach((listName) => {
+    const listCard = document.createElement("div");
+    listCard.className = "list-card";
+    listCard.dataset.listName = listName;
+
+    listCard.innerHTML = `
+        <h3>${listName}</h3>
+        <ul class="task-list"></ul>
+        <button class="add-task-button" data-list="${listName}">+ Add a task</button>
+    `;
+
+    const listsContainer = document.querySelector(".lists-container");
+    listsContainer.appendChild(listCard);
+
+    listCard.querySelector(".add-task-button").addEventListener("click", () => {
+        openModal(listName);
+    });
+});
+
+// Load custom lists on page load
+loadListsFromLocalStorage();
 });
