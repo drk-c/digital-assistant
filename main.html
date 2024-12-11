@@ -11,19 +11,58 @@
         <aside class="sidebar">
             <button class="create-button">+ Create</button>
             <ul class="lists">
-                <li>All tasks</li>
-                <li class="list-item">Today</li>
-                <li class="list-item">Homework</li>
-                <li class="list-item">To Do</li>
+                <li data-category="all">View All</li>
+                <li class="list-item" data-category="this-week">This Week</li>
+                <li class="list-item" data-category="homework">Homework</li>
+                <li class="list-item" data-category="to-do">To Do</li>
                 <button class="create-new-list">+ Create new list</button>
             </ul>
         </aside>
         <main class="main-content">
-	    <div class="lists-container">
-		<!-- Dynamic list cards will appear here -->
-	    </div>
+            <div class="lists-container">
+                <!-- Dynamic list cards will appear here -->
+            </div>
+            <!-- Weather Section -->
+            <div id="weather-section" class="weather-container">
+                <!-- Weather content will be dynamically loaded here -->
+            </div>
         </main>
     </div>
+
+    <script>
+        // Function to dynamically load the weather app
+        function loadWeatherApp() {
+            const weatherSection = document.getElementById('weather-section');
+
+            // Clear any existing weather content
+            weatherSection.innerHTML = '';
+
+            // Fetch the weather HTML file
+            fetch('weatherIndex.html')
+                .then(response => response.text())
+                .then(html => {
+                    weatherSection.innerHTML = html;
+
+                    // Dynamically load the weather script
+                    const weatherScript = document.createElement('script');
+                    weatherScript.src = 'weatherScript.js';
+                    weatherScript.defer = true;
+                    document.body.appendChild(weatherScript);
+
+                    // Dynamically load the weather styles
+                    const weatherStyles = document.createElement('link');
+                    weatherStyles.rel = 'stylesheet';
+                    weatherStyles.href = 'weatherStyles.css';
+                    document.head.appendChild(weatherStyles);
+                })
+                .catch(err => console.error('Error loading weather app:', err));
+        }
+
+        // Automatically load the weather app when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWeatherApp();
+        });
+    </script>
     <script src="script.js" defer></script>
 </body>
 </html>

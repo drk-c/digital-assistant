@@ -58,9 +58,32 @@ body {
     overflow-y: auto;
 }
 
+/* Week view card */
+.day-card {
+    background: rgba(240, 240, 240, 0.9);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.day-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Individual task card */
+.task-card {
+    background: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 /* Individual list cards */
 .list-card {
-    background-color: white;
+    background-color: rgba(214, 212, 212, 0.705);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 15px;
@@ -107,7 +130,7 @@ body {
 
 .add-task-button {
     background-color: #ede9de;
-    color: #8c846d;
+    color: #4c76d1;
     padding: 8px 12px;
     border: none;
     border-radius: 4px;
@@ -131,15 +154,61 @@ body {
     height: 100vh;
 }
 
+/* Color of the created tasks */
 .task-item {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     background-color: #ffffff;
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.task-item .delete-task-button {
+    position: absolute;
+    top: 5px;
+    right: 3px; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.task-item .task-checkbox {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.task-item.completed {
+    opacity: 0.6;
+    position: relative;
+}
+
+.task-item.completed strong,
+.task-item.completed p {
+    text-decoration: line-through;
+}
+
+.task-item.completed::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.2) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
 }
 
 .task-item div {
@@ -157,12 +226,12 @@ body {
     font-size: 14px;
     color: #555;
     display: flex;
-    align-items: center; /* Align icon and text */
+    align-items: center;
     margin-bottom: 5px;
 }
 
 .task-item small svg {
-    margin-right: 5px; /* Add space between icon and date */
+    margin-right: 5px;
 }
 
 .task-item p {
@@ -172,7 +241,7 @@ body {
 }
 
 .task-options {
-    margin-left: auto; /* Push options to the far right */
+    margin-left: auto;
 }
 
 .task-item .task-title {
@@ -201,17 +270,25 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    transition: opacity 0.3s ease-in-out;
 }
 
 .modal.hidden {
     opacity: 0;
     pointer-events: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
 }
 
 .modal-content {
@@ -221,6 +298,8 @@ body {
     width: 400px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    position: relative;
+    z-index: 1001; /* Ensure content stays above the overlay */
 }
 
 .modal-content h3 {
@@ -284,7 +363,7 @@ body {
 .dropdown-toggle::before {
     content: "⋮";
     color: #a79d99;
-    display: inline-block;;
+    display: inline-block; 
     cursor: pointer;
     font-size: 28px;
     line-height: 1;
@@ -328,7 +407,7 @@ body {
     color: white;
     font-size: 12px;
 }
-i
+
 /* Color selection */
 .color-options {
     display: flex;

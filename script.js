@@ -5,143 +5,142 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Create a modal popup for task creation
     const modal = document.createElement("div");
-    modal.className = "modal hidden";
+    modal.className = "modal modal-task hidden";
     modal.innerHTML = `
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3>Create Task</h3>
-            <input type="text" id="task-title" placeholder="Add title" />
-            <div class="input-group">
-                <label for="task-date">Date:</label>
-                <input type="date" id="task-date" />
+        <div class="modal-overlay">
+            <div class="modal-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <span class="close-button">&times;</span>
+                <h3>Create Task</h3>
+                <input type="text" id="task-title" placeholder="Task Name..." />
+                <div class="input-group">
+                    <label for="task-date">Due Date:</label>
+                    <input type="date" id="task-date" />
+                </div>
+                <div class="input-group">
+                    <label for="task-time">Time Due:</label>
+                    <input type="time" id="task-time" />
+                </div>
+                <textarea id="task-description" placeholder="Add description"></textarea>
+                <button id="save-task">Save</button>
             </div>
-            <div class="input-group">
-                <label for="task-time">Time:</label>
-                <input type="time" id="task-time" />
-            </div>
-            <textarea id="task-description" placeholder="Add description"></textarea>
-            <button id="save-task">Save</button>
         </div>
     `;
     document.body.appendChild(modal);
 
-    let activeListName = null; //This tracks which list the task is being added to
+    let activeListName = null;
 
-    // Function to open the modal
+    // Function to open the modal and reset inputs
     const openModal = (listName = null) => {
-	activeListName = listName;
+        activeListName = listName;
+
+        document.getElementById("task-title").value = "";
+        document.getElementById("task-date").value = "";
+        document.getElementById("task-time").value = "";
+        document.getElementById("task-description").value = "";
+
         modal.classList.remove("hidden");
     };
 
     // Function to close the modal
     const closeModal = () => {
         modal.classList.add("hidden");
-	activeListName = null;
+        activeListName = null;
     };
 
-    // Event listener for opening modal
+    // Event listener for opening task creation modal
     createButton.addEventListener("click", () => openModal());
 
-    // Event listener for closing modal
+    // Close modal when clicking outside modal-content
+    modal.addEventListener("click", (event) => {
+        if (event.target.classList.contains("modal-overlay")) {
+            closeModal();
+        }
+    });
+
+    // Close modal with "X" button
     modal.querySelector(".close-button").addEventListener("click", closeModal);
 
+    // Close modal with Escape key
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+            closeModal();
+        }
+    });
+
+    // Function to save tasks to Local Storage
+    const saveTasksToLocalStorage = () => {
+        const tasks = [];
+        document.querySelectorAll(".task-item").forEach((taskItem) => {
+            const title = taskItem.querySelector("strong").textContent;
+            const date = taskItem.querySelector("small").textContent.split(" ")[0];
+            const time = taskItem.querySelector("small").textContent.split(" ")[1];
+            const description = taskItem.querySelector("p").textContent;
+            const listName = taskItem.closest(".list-card").dataset.listName;
+            const completed = taskItem.classList.contains("completed");
+
+            tasks.push({ listName, title, date, time, description, completed });
+        });
+
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    };
+
+    // Function to load tasks from Local Storage
+    const loadTasksFromLocalStorage = () => {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks.forEach((task) => {
+            addTaskToList(
+                task.listName,
+                task.title,
+                task.date,
+                task.time,
+                task.description,
+                task.completed
+            );
+        });
+    };
+
     // Function to add a task to a specific list
-    const addTaskToList = (listName, taskTitle, taskDate, taskTime, taskDescription) => {
+    const addTaskToList = (listName, taskTitle, taskDate, taskTime, taskDescription, completed = false) => {
         const listCard = document.querySelector(`.list-card[data-list-name="${listName}"]`);
         const taskList = listCard.querySelector(".task-list");
 
-        // Create a new task item
         const taskItem = document.createElement("li");
-	taskItem.className = "task-item";
+        taskItem.className = "task-item";
+        if (completed) {
+            taskItem.classList.add("completed");
+        }
+
         taskItem.innerHTML = `
-	    <div>
-                <strong>${taskTitle}</strong> <br>
-                <small>
-		    <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 24 24" width="14" fill="#efe8e5">
-                        <path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 12h-4V8h2v4h2z"/>
-                    </svg>
-                    ${taskDate} ${taskTime}
-		</small>
-                <p>${taskDescription || ""}</p>
-	    </div>
-            <div class="task-options">
-                <button class="dropdown-toggle">⋮</button>
-                <div class="dropdown hidden">
-                    <button class="add-label">Add Label</button>
+            <div class="task-main">
+                <input type="checkbox" class="task-checkbox" ${completed ? "checked" : ""} />
+                <div>
+                    <strong>${taskTitle}</strong> 
+                    ${taskDate || taskTime ? `<br><small>${taskDate || ""} ${taskTime || ""}</small>` : ""}
+                    ${taskDescription ? `<p>${taskDescription}</p>` : ""}
                 </div>
             </div>
+            <button class="delete-task-button">🗑️</button>
         `;
 
         taskList.appendChild(taskItem);
-	
-	// Add event listeners for the dropdown
-        const dropdownToggle = taskItem.querySelector(".dropdown-toggle");
-        const dropdownMenu = taskItem.querySelector(".dropdown");
 
-        dropdownToggle.addEventListener("click", () => {
-            dropdownMenu.classList.toggle("hidden");
-        });
-
-        // Add event listener for "Add Label"
-        const addLabelButton = taskItem.querySelector(".add-label");
-        addLabelButton.addEventListener("click", () => openLabelModal(taskItem));
-    };
-
-    // Open a modal to add a label
-    const openLabelModal = (taskItem) => {
-        const labelModal = document.createElement("div");
-        labelModal.className = "modal";
-        labelModal.innerHTML = `
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3>Add Label</h3>
-                <input type="text" id="label-title" placeholder="Label Title" />
-                <div class="color-options">
-                    <button class="color-button" data-color="#ade4df" style="background-color: #ade4df;"></button>
-                    <button class="color-button" data-color="#e4e49c" style="background-color: #e4e49c;"></button>
-                    <button class="color-button" data-color="#e19ce4" style="background-color: #e19ce4;"></button>
-                    <button class="color-button" data-color="#e4b49c" style="background-color: #e4b49c;"></button>
-                </div>
-                <button id="save-label">Save Label</button>
-            </div>
-        `;
-
-        document.body.appendChild(labelModal);
-
-        // Close modal
-        const closeModalButton = labelModal.querySelector(".close-button");
-        closeModalButton.addEventListener("click", () => {
-            labelModal.remove();
-        });
-
-        // Save label
-        const saveLabelButton = labelModal.querySelector("#save-label");
-        saveLabelButton.addEventListener("click", () => {
-            const labelTitle = labelModal.querySelector("#label-title").value.trim();
-            const selectedColor = labelModal.querySelector(".color-button.selected");
-
-            if (labelTitle && selectedColor) {
-                const label = document.createElement("span");
-                label.className = "task-label";
-                label.textContent = labelTitle;
-                label.style.backgroundColor = selectedColor.dataset.color;
-
-                taskItem.querySelector("div").appendChild(label);
-                labelModal.remove();
+        const checkbox = taskItem.querySelector(".task-checkbox");
+        checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+                taskItem.classList.add("completed");
             } else {
-                alert("Please provide a label title and select a color.");
+                taskItem.classList.remove("completed");
             }
+            saveTasksToLocalStorage();
         });
 
-        // Handle color selection
-        const colorButtons = labelModal.querySelectorAll(".color-button");
-        colorButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-                colorButtons.forEach((btn) => btn.classList.remove("selected"));
-                button.classList.add("selected");
-            });
+        const deleteButton = taskItem.querySelector(".delete-task-button");
+        deleteButton.addEventListener("click", () => {
+            taskItem.remove();
+            saveTasksToLocalStorage();
         });
+
+        saveTasksToLocalStorage();
     };
 
     // Function to create a new list
@@ -158,36 +157,78 @@ document.addEventListener("DOMContentLoaded", () => {
 
         listsContainer.appendChild(listCard);
 
-        // Add event listener to the "Add a task" button
         listCard.querySelector(".add-task-button").addEventListener("click", () => {
             openModal(listName);
         });
     };
 
-    // Event listener for saving a task from the modal
+    // Function to open a modal for creating a new list
+    const openNewListModal = () => {
+        const newListModal = document.createElement("div");
+        newListModal.className = "modal modal-list";
+        newListModal.innerHTML = `
+            <div class="modal-overlay">
+                <div class="modal-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <span class="close-button">&times;</span>
+                    <h3>Create New List</h3>
+                    <input type="text" id="new-list-name" placeholder="Enter list name" />
+                    <button id="save-new-list">Create List</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(newListModal);
+
+        const closeModal = () => {
+            document.removeEventListener("keydown", escapeListener);
+            newListModal.remove();
+        };
+
+        const escapeListener = (event) => {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        };
+
+        newListModal.addEventListener("click", (event) => {
+            if (event.target.classList.contains("modal-overlay")) {
+                closeModal();
+            }
+        });
+
+        newListModal.querySelector(".close-button").addEventListener("click", closeModal);
+
+        newListModal.querySelector("#save-new-list").addEventListener("click", () => {
+            const listName = newListModal.querySelector("#new-list-name").value.trim();
+            if (listName) {
+                createNewList(listName);
+                closeModal();
+            } else {
+                alert("Please enter a list name.");
+            }
+        });
+
+        document.addEventListener("keydown", escapeListener);
+    };
+
+    createNewListButton.addEventListener("click", openNewListModal);
+
     modal.querySelector("#save-task").addEventListener("click", () => {
         const taskTitle = document.getElementById("task-title").value.trim();
         const taskDate = document.getElementById("task-date").value;
         const taskTime = document.getElementById("task-time").value;
         const taskDescription = document.getElementById("task-description").value.trim();
 
-        if (taskTitle && taskDate && activeListName) {
+        if (taskTitle) {
             addTaskToList(activeListName, taskTitle, taskDate, taskTime, taskDescription);
             closeModal();
         } else {
-            alert("Please fill out the title, date, and ensure you're adding the task to a list.");
+            alert("Please provide at least a title for the task.");
         }
     });
 
-
-    createNewListButton.addEventListener("click", () => {
-        const listName = prompt("Enter new list name:");
-        if (listName) {
-            createNewList(listName);
-        }
-    });
-
-    // Predefined lists
     const predefinedLists = ["Today", "Homework", "To Do", "Career"];
     predefinedLists.forEach((list) => createNewList(list));
+
+    loadTasksFromLocalStorage();
 });

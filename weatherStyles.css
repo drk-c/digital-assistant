@@ -1,0 +1,108 @@
+/* Match styles and colors to styles.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+#weather-container {
+    background: rgba(123, 151, 245, 0.9);
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid #5b7deb;
+    text-align: center;
+    margin: 20px auto;
+    color: #000;
+}
+
+#weather-container h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#weather-container input {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#weather-container button {
+    background-color: #dee2ed;
+    color: #8c846d;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#weather-container button:hover {
+    background-color: #d3cedd;
+}
+
+#weather-container #temp-div p {
+    font-size: 36px;
+    font-weight: bold;
+    color: #555;
+    margin: 10px 0;
+}
+
+#weather-container #weather-info p {
+    font-size: 16px;
+    color: #666;
+}
+
+#weather-container #weather-icon {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+}
+
+#weather-info p:first-child {
+    color: #000;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#weather-info p:nth-child(2) {
+    color: #000;
+    font-style: italic;
+    font-size: 18px;
+}
+
+#hourly-forecast {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 10px;
+}
+
+.hourly-item {
+    flex: 0 0 auto;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    font-size: 14px;
+}
+
+.hourly-item img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
