@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     
         // Add label functionality
-        const addLabelButton = taskItem.querySelector(".add-label-button");
+        const addLabelButton = taskItem.querySelector(".label-task-button");
         addLabelButton.addEventListener("click", () => openLabelModal(taskItem));
     
         saveTasksToLocalStorage();
@@ -161,10 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h3>Add Label</h3>
                     <input type="text" id="label-title" placeholder="Label Title" />
                     <div class="color-options">
-                        <button class="color-button" data-color="#ade4df" style="background-color: #ade4df;"></button>
-                        <button class="color-button" data-color="#e4e49c" style="background-color: #e4e49c;"></button>
-                        <button class="color-button" data-color="#e19ce4" style="background-color: #e19ce4;"></button>
-                        <button class="color-button" data-color="#e4b49c" style="background-color: #e4b49c;"></button>
+                        <button class="color-button" data-color="#e85a5a" style="background-color: #e85a5a;"></button>
+                        <button class="color-button" data-color="#1db849" style="background-color: #1db849;"></button>
+                        <button class="color-button" data-color="#307de3" style="background-color: #307de3;"></button>
+                        <button class="color-button" data-color="#fcfaa4" style="background-color: #fcfaa4;"></button>
                     </div>
                     <button id="save-label">Save Label</button>
                 </div>
