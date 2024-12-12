@@ -103,27 +103,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskToList = (listName, taskTitle, taskDate, taskTime, taskDescription, completed = false) => {
         const listCard = document.querySelector(`.list-card[data-list-name="${listName}"]`);
         const taskList = listCard.querySelector(".task-list");
-
+    
+        // Create a new task item
         const taskItem = document.createElement("li");
         taskItem.className = "task-item";
         if (completed) {
             taskItem.classList.add("completed");
         }
-
+    
         taskItem.innerHTML = `
             <div class="task-main">
-                <input type="checkbox" class="task-checkbox" ${completed ? "checked" : ""} />
-                <div>
-                    <strong>${taskTitle}</strong> 
-                    ${taskDate || taskTime ? `<br><small>${taskDate || ""} ${taskTime || ""}</small>` : ""}
-                    ${taskDescription ? `<p>${taskDescription}</p>` : ""}
-                </div>
-            </div>
-            <button class="delete-task-button">🗑️</button>
+        <button class="delete-task-button">🗑️</button>
+        <input type="checkbox" class="task-checkbox" ${completed ? "checked" : ""} />
+        <div>
+            <strong>${taskTitle}</strong>
+            ${taskDate || taskTime ? `<br><small>${taskDate || ""} ${taskTime || ""}</small>` : ""}
+            ${taskDescription ? `<p>${taskDescription}</p>` : ""}
+        </div>
+        <button class="label-task-button">🏷️</button>
+    </div>
         `;
-
+    
         taskList.appendChild(taskItem);
-
+    
+        // Checkbox functionality
         const checkbox = taskItem.querySelector(".task-checkbox");
         checkbox.addEventListener("change", () => {
             if (checkbox.checked) {
@@ -133,14 +136,74 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             saveTasksToLocalStorage();
         });
-
+    
+        // Delete task functionality
         const deleteButton = taskItem.querySelector(".delete-task-button");
         deleteButton.addEventListener("click", () => {
             taskItem.remove();
             saveTasksToLocalStorage();
         });
-
+    
+        // Add label functionality
+        const addLabelButton = taskItem.querySelector(".add-label-button");
+        addLabelButton.addEventListener("click", () => openLabelModal(taskItem));
+    
         saveTasksToLocalStorage();
+    };
+
+    const openLabelModal = (taskItem) => {
+        const labelModal = document.createElement("div");
+        labelModal.className = "modal";
+        labelModal.innerHTML = `
+            <div class="modal-overlay">
+                <div class="modal-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <span class="close-button">&times;</span>
+                    <h3>Add Label</h3>
+                    <input type="text" id="label-title" placeholder="Label Title" />
+                    <div class="color-options">
+                        <button class="color-button" data-color="#ade4df" style="background-color: #ade4df;"></button>
+                        <button class="color-button" data-color="#e4e49c" style="background-color: #e4e49c;"></button>
+                        <button class="color-button" data-color="#e19ce4" style="background-color: #e19ce4;"></button>
+                        <button class="color-button" data-color="#e4b49c" style="background-color: #e4b49c;"></button>
+                    </div>
+                    <button id="save-label">Save Label</button>
+                </div>
+            </div>
+        `;
+    
+        document.body.appendChild(labelModal);
+    
+        // Close modal functionality
+        const closeModalButton = labelModal.querySelector(".close-button");
+        closeModalButton.addEventListener("click", () => labelModal.remove());
+    
+        // Save label functionality
+        const saveLabelButton = labelModal.querySelector("#save-label");
+        saveLabelButton.addEventListener("click", () => {
+            const labelTitle = labelModal.querySelector("#label-title").value.trim();
+            const selectedColor = labelModal.querySelector(".color-button.selected");
+    
+            if (labelTitle && selectedColor) {
+                const label = document.createElement("span");
+                label.className = "task-label";
+                label.textContent = labelTitle;
+                label.style.backgroundColor = selectedColor.dataset.color;
+    
+                taskItem.querySelector(".task-main > div").appendChild(label);
+                labelModal.remove();
+            } else {
+                alert("Please provide a label title and select a color.");
+            }
+        });
+    
+        // Handle color selection
+        const colorButtons = labelModal.querySelectorAll(".color-button");
+        colorButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                colorButtons.forEach((btn) => btn.classList.remove("selected"));
+                button.classList.add("selected");
+            });
+        });
     };
 
     // Function to create a new list
