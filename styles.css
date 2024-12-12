@@ -180,10 +180,21 @@ body {
 
 .task-item .task-checkbox {
     position: absolute;
-    top: 50%;
+    top: 48%;
     right: 14px;
     transform: translateY(-50%);
     cursor: pointer;
+}
+
+.task-item .label-task-button {
+    position: absolute;
+    bottom: 5px;
+    right: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #3498db;
 }
 
 .task-item.completed {
@@ -407,6 +418,20 @@ body {
     border-radius: 4px;
     color: white;
     font-size: 12px;
+    margin-right: 5px;
+}
+
+.add-label-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #007bff;
+    margin-left: 5px;
+}
+
+.add-label-button:hover {
+    color: #0056b3;
 }
 
 /* Color selection */
@@ -442,3 +467,19 @@ body {
 .delete-list-button:hover {
     color: darkred !important;
 }
+
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: transparent; /* No background */
+    border: none; /* No border */
+    color: red; /* Red color for the trash icon */
+    font-size: 20px; /* Size of the icon */
+    cursor: pointer; /* Pointer cursor for interactivity */
+}
+
+.delete-icon:hover {
+    color: darkred; /* Darker red on hover */
+}
+
