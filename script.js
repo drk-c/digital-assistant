@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const createButton = document.querySelector(".create-button");
     const listsContainer = document.querySelector(".lists-container");
     const createNewListButton = document.querySelector(".create-new-list");
+    
 
     // Create a modal popup for task creation
     const modal = document.createElement("div");
@@ -88,14 +89,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadTasksFromLocalStorage = () => {
         const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
         tasks.forEach((task) => {
-            addTaskToList(
-                task.listName,
-                task.title,
-                task.date,
-                task.time,
-                task.description,
-                task.completed
-            );
+            // Verify if the list exists before adding tasks
+            const listCard = document.querySelector(`.list-card[data-list-name="${task.listName}"]`);
+            if (listCard) {
+                addTaskToList(
+                    task.listName,
+                    task.title,
+                    task.date,
+                    task.time,
+                    task.description,
+                    task.completed
+                );
+            } else {
+                console.warn(`List "${task.listName}" not found for task "${task.title}"`);
+            }
         });
     };
 
@@ -346,6 +353,7 @@ predefinedLists.forEach((listName) => {
     });
 });
 
-// Load custom lists on page load
+// Load lists and tasks from Local Storage on page load
 loadListsFromLocalStorage();
+loadTasksFromLocalStorage();
 });
