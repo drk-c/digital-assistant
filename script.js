@@ -3,7 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const listsContainer = document.querySelector(".lists-container");
     const createNewListButton = document.querySelector(".create-new-list");
     
+    const updateClock = () => {
+        const clockElement = document.getElementById("live-clock");
+        if (!clockElement) {
+            console.error("Clock element not found!");
+            return;
+        }
 
+        const now = new Date();
+
+        // Format date and time
+        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const date = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+        // Update the clock element
+        clockElement.innerHTML = `<p>${date}</p><p>${time}</p>`;
+    };
+
+    // Call updateClock immediately and set it to update every second
+    updateClock();
+    setInterval(updateClock, 1000);
+    
     // Create a modal popup for task creation
     const modal = document.createElement("div");
     modal.className = "modal modal-task hidden";
@@ -292,6 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.addEventListener("keydown", escapeListener);
     };
+
 
     createNewListButton.addEventListener("click", openNewListModal);
 
