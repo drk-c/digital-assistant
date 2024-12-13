@@ -26,6 +26,10 @@ The app now includes an integrated weather feature for real-time weather updates
 4. **Completed Tasks**
    - Mark tasks as completed to track progress.
    - Completed tasks move to the bottom of the list in a faded state, providing a sense of accomplishment.
+  
+5. **Live Clock/Date**
+   - Display a live clock and current date within the app interface.
+   - Ensures students can manage their time effectively and stay aware of deadlines in real-time.
 
 ### Advanced Features
 1. **Weather Integration**
